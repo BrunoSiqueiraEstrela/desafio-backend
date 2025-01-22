@@ -1,0 +1,9 @@
+{
+    "makefile.configureOnOpen": false,
+    "editor.minimap.autohide": false,
+    "editor.minimap.enabled": true,
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "flake8.ignorePatterns": [
+        "E701"
+    ]
+}
