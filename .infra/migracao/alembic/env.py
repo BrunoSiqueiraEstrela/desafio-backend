@@ -23,7 +23,7 @@ DB_PATH = ENVS.DB_STRING_CONNECTION
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
-config = context.config
+config = context.config  # noqa: E1101
 
 
 # Interpret the config file for Python logging.
