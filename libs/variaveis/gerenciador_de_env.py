@@ -21,7 +21,6 @@ class GerenciadorENV(BaseSettings):
     HOST: Final[str] = Field(env="HOST")  # USADO
 
     # BANCO DE DADOS
-    DB_CONNECTION: Final[str] = Field(env="DB_CONNECTION")  # Usado
     DB_HOST: Final[str] = Field(env="DB_HOST")  # Usado
     DB_PORT: Final[str] = Field(env="DB_PORT")  # Usado
     DB_USER: Final[str] = Field(env="DB_USER")  # Usado
