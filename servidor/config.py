@@ -31,16 +31,26 @@ async def add_tempo_de_resposta(request: Request, call_next):
     return resposta
 
 
+# Rota de health check
+@app.get("/health-check", tags=["HELPERS"], include_in_schema=False)
+async def health_check() -> dict[str, str]:
+    return {"status": "ok"}
+
+
 def registrar_rotas():
     from contexto.usuario.pontos_de_entrada.conta_de_usuario import rota as usuario
     from contexto.usuario.pontos_de_entrada.conta_de_usuario import auth
     from contexto.usuario.pontos_de_entrada.conta_de_usuario import admin
-    from contexto.tarefa.pontos_de_entrada.gerencia_de_tarefa import rota as tarefa
+    from contexto.calculo_de_valores.pontos_de_entrada.carteira import rota as carteira
+    from contexto.calculo_de_valores.pontos_de_entrada.transferencia_de_valores import (
+        rota as transferencia,
+    )
 
     app.include_router(auth)
     app.include_router(usuario)
-    app.include_router(tarefa)
     app.include_router(admin)
+    app.include_router(transferencia)
+    app.include_router(carteira)
 
 
 def registrar_eventos_e_comandos():
@@ -70,25 +80,30 @@ def registrar_eventos_e_comandos():
         ObterPerfilUsuario,
         ObterUsuarioLogado,
     )
-    from contexto.tarefa.dominio.comandos.gerencia_de_tarefa import (
-        AtualizarTarefa,
-        CriarTarefa,
-        DeletarTarefa,
-        BuscarTarefas,
-        BuscarTodasTarefasPorIdDoUsuario,
-        BuscarTarefaPorIdDeTarefa,
+
+    from contexto.calculo_de_valores.servicos.executores.carteira import (
+        criar_carteira_do_usuario,
+        atualizar_carteira_do_usuario,
+    )
+    from contexto.calculo_de_valores.servicos.visualizadores.carteira import (
+        listar_carteiras_do_usuario,
+    )
+    from contexto.calculo_de_valores.dominio.comandos.carteira import (
+        CriarCarteira,
+        AtualizarCarteira,
+        ListarCarteiras,
+    )
+    from contexto.calculo_de_valores.dominio.comandos.transferencia_de_valores import (
+        RealizarTransferencia,
+        ListarTransferenciasDeUmUsuarioPorPeriodo,
     )
 
-    from contexto.tarefa.servicos.executores.gerencia_de_tarefa import (
-        atualizar_tarefa,
-        criar_tarefa,
-        deletar_tarefa,
+    from contexto.calculo_de_valores.servicos.executores.transferencia_de_valores import (
+        realizar_transferencia,
     )
 
-    from contexto.tarefa.servicos.visualizadores.gerencia_de_tarefa import (
-        obter_tarefas_por_status,
-        obter_tarefas_por_id_do_usuario,
-        obter_tarefas_por_id,
+    from contexto.calculo_de_valores.servicos.visualizadores.transferencia_de_valores import (
+        listar_transferencias_do_usuario,
     )
 
     # usuario
@@ -108,19 +123,15 @@ def registrar_eventos_e_comandos():
     barramento.registrar_comando(ListarUsuarios, listar_todos_usuarios)
     barramento.registrar_comando(ObterPerfilUsuario, obter_usuario_logado)
 
-    # tarefas
-    # executadores
-    barramento.registrar_comando(CriarTarefa, criar_tarefa)
-    barramento.registrar_comando(AtualizarTarefa, atualizar_tarefa)
-    barramento.registrar_comando(DeletarTarefa, deletar_tarefa)
+    # carteira
+    barramento.registrar_comando(CriarCarteira, criar_carteira_do_usuario)
+    barramento.registrar_comando(AtualizarCarteira, atualizar_carteira_do_usuario)
+    barramento.registrar_comando(ListarCarteiras, listar_carteiras_do_usuario)
 
-    # visualizadores
-    barramento.registrar_comando(BuscarTarefas, obter_tarefas_por_status)
-    # Buscar Tarefa por id E Usuario por id
-    barramento.registrar_comando(BuscarTarefaPorIdDeTarefa, obter_tarefas_por_id)
-    # Todas tarefas por id do usuario
+    # transferencia
+    barramento.registrar_comando(RealizarTransferencia, realizar_transferencia)
     barramento.registrar_comando(
-        BuscarTodasTarefasPorIdDoUsuario, obter_tarefas_por_id_do_usuario
+        ListarTransferenciasDeUmUsuarioPorPeriodo, listar_transferencias_do_usuario
     )
 
 
