@@ -2,4 +2,5 @@ from pydantic import BaseModel
 
 
 class Modelo(BaseModel):
-    class Config: ...
+    class Config:
+        pass
