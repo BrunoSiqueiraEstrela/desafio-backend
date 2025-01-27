@@ -1,6 +1,8 @@
 import os
-from uuid import uuid4
 from unittest.mock import patch
+from uuid import uuid4
+
+from test.contexto.mocks.uow import MockUoW
 
 from contexto.usuario.servicos.executores.conta_de_usuario import (
     atualizar_nivel_de_acesso,
@@ -9,8 +11,6 @@ from contexto.usuario.servicos.executores.conta_de_usuario import (
     deletar_usuario,
     login_de_usuario,
 )
-from test.contexto.spy.uow import MockUoW
-
 from contexto.usuario.repositorio.repo.conta_de_usuario import (
     ContaDeUsuarioRepoAbstrato,
 )
