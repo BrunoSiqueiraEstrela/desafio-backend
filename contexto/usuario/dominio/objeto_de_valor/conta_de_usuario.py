@@ -2,7 +2,8 @@ from enum import Enum
 from libs.tipos.uuid import ID
 
 
-class UsuarioID(ID): ...
+class UsuarioID(ID):
+    pass
 
 
 class NivelDeAcesso(Enum):

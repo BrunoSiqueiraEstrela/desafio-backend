@@ -32,7 +32,7 @@ def criar_usuario(comando: CriarUsuario, uow: UnidadeDeTrabalhoAbastrato):
     with uow:
         repositorio = ContaDeUsuarioRepo(uow.session)
 
-        email_existe = repositorio.buscar_por_email(usuario.email)
+        email_existe: Usuario | None = repositorio.buscar_por_email(usuario.email)
 
         if email_existe:
             raise ErroAoCriarUsuario(detail="Email já cadastrado", status_code=400)

@@ -1,4 +1,5 @@
 from uuid import uuid4
+from sqlalchemy.orm.mapper import Mapper
 from sqlalchemy.types import Uuid, String, DateTime, Boolean, Enum
 from sqlalchemy.schema import Column, Table
 from sqlalchemy.sql import func
@@ -16,17 +17,17 @@ tabela_usuario = Table(
     Column("senha", String(100), nullable=False),
     Column("nivel_de_acesso", Enum(NivelDeAcesso), nullable=False),
     Column("ativo", Boolean, nullable=False, server_default="true"),
-    Column("criado_em", DateTime, nullable=False, server_default=func.now()),
+    Column("criado_em", DateTime, nullable=False, server_default=func.now()),  # pylint: disable=not-callable
     Column(
         "atualizado_em",
         DateTime,
         nullable=False,
-        server_default=func.now(),
-        onupdate=func.now(),
+        server_default=func.now(),  # pylint: disable=not-callable
+        onupdate=func.now(),  # pylint: disable=not-callable
     ),
     Column("deletado_em", DateTime, nullable=True),
 )
 
-usuario_orm_mapper = REGISTRO_DOS_ORMS.map_imperatively(
+usuario_orm_mapper: Mapper[Usuario] = REGISTRO_DOS_ORMS.map_imperatively(
     Usuario, tabela_usuario, properties={"id": tabela_usuario.c.id}
 )
