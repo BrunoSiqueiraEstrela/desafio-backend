@@ -1,75 +1,108 @@
-# API para Gerenciador de Tarefas - Boilerplate 
-Projeto de API em python para servir como boiler-plate com boas praticas de codigo e arquitetura. 
+# Desafio Backend
+Minha implementação do desafio backend proposto pela WL-Consultings: https://github.com/WL-Consultings/challenges/blob/main/backend/README.md
+
+Usei meu boilerplate criado por mim como base para esse projeto: https://github.com/BrunoSiqueiraEstrela/api-boilerplate-python
+
+### MOTIVOS
+
+Uso do FastAPI: Usei o FastAPI por ser o framework onde tenho mais conhecimento no python e com meu boiler plate feito utilizando ele. Decidi utilizar meu boilerplate pois já havia feito a implementação de autenticação e autorização, e a arquitetura já estava pronta.
 
 
-## Lista de tecnologias usadas:
- 
-- Python: FastAPI, Pydantic, SQLAlchemy, Alembic, Poetry, Pytest
-- Docker
-- Postgres
-- Arquitetura: DDD, Clean Architecture, SOLID, UNIT OF WORK, REPOSITORY PATTERN, Event Driven Design
-- Testes: Unitarios, Integração, E2E
-- CI/CD: Github Actions
+## Features
 
-## TODO:
-
-- [x] Refatorar testes unitarios
-- [ ] Mudar nome do projeto no github
-- [ ] Adicionar sistema de envio de email
-- [ ] Adicionar evento de envio de email
-- [ ] Criar Dockerfile para containirizar a aplicação  
-- [ ] Criar docker-compose para subir a aplicação  
-- [ ] Criar testes de integração e E2E
-- [ ] Aprimorar Github Actions e conectar com a maquina teste
-- [x] Mudar camada de repositorio para usar interface entre a camada de dominio e infraestrutura
-- [ ] Implementar sistema de cache(Talvez muito complexo para um projeto já complexo demais até)
-- [ ] Implementar sistema de logs
-- [x] Mudar querys para não exibir itens desativados
-- [ ] Implementar version ao realizar execuções de comandos no banco de dados
-- [ ] Fazer Front
+[x] Autenticação
+[x] Criar um usuário
+[x] Criar uma carteira
+[x] Criar uma transferencia
+[x] Consultar saldo da carteira de um usuário
+[x] Adicionar saldo à carteira
+[x] Criar uma transferência entre usuários (carteiras)
+[x] Listar transferências realizadas por um usuário, com filtro opcional por período de data
 
 ## Requisitos
 
 - Python 3.11
 - Poetry
-- Docker se for usar o container
+- Docker 
+- MakeFile
 
-## Instalação
+- ---
 
-Clonar repositorio e instalar dependencias:
+## :computer: Como Executar o Projeto:
+- Certifique-se de que não há nenhum serviço rodando na porta **8888** e **5432**, o serviço do **Postgres** e **Backend** serão executados em containers Docker.
 
-```sh
-git clone https://github.com/BrunoSiqueiraEstrela/gerenciador_de_tarefas
-cd gerenciador_de_tarefas
+- ---
+1 - Entre na pasta do projeto e execute o comando:
+```bash 
+make docker-up
+```
+> Após a execução do comando acima, o projeto estará rodando na porta 8888. (Configurado no .env/.env.docker)
+
+2 - Rodando as Migrations:
+```bash 
+make migration-upgrade
+```
+> Após a execução do comando acima, as tabelas serão criadas no banco de dados.
+
+3 - Acesse o projeto em seu navegador:
+```bash
+http://localhost:8888
+```
+> Deve lhe redirecionar para a página de Documentação da API.
+<img src="./docs/api.png" alt="API" style="width: 100%;"/>
+---
+## Caso queira rodar o projeto localmente:
+> Certifique-se de que o **Python 3.11** e o **Poetry** estão instalados em sua máquina.
+
+1 - Entre na pasta do projeto e execute o comando:
+```bash
+pip install poetry
+```
+
+2 - Instale as dependências do projeto:
+```bash
 poetry install
 ```
 
-## Uso
-
-### Rodando a aplicação pelo containers
-
-- TODO
-
-### Rodando a aplicação localmente
-
-Prencher o arquivo .env com as variaveis de ambiente
-
-
-```sh
-poetry run uvicorn app.main:app --reload
-
+3 - Inicialize o banco de dados:
+```bash
+make docker-db-up
 ```
-## Testes
+> Após a execução do comando acima, o banco de dados estará rodando na porta 5432.
 
-```sh
-poetry run pytest
+
+- Para encerrar o banco de dados, execute o comando:
+```bash
+make docker-db-down
+```
+
+4 - Execute as migrações:
+```bash
+make migration-upgrade
+```
+
+5 - Execute o comando para rodar o projeto:
+> Recomendado utilizar o VSCode para rodar o projeto. (O mesmo já está configurado para rodar o projeto)
+
+5.1 - Caso queira rodar o projeto via terminal, execute o comando:
+```bash
+poetry run uvicorn servidor.config:app
+```
+
+- ---
+## :wrench: Comandos Úteis
+- Caso queira parar o projeto, execute o comando:
+```bash
+make docker-down
+```
+
+- Caso queira rodar os testes, execute o comando:
+```bash
+make run-tests
 ```
 
 ## Inspirações:
 
 CosmicPython: https://www.cosmicpython.com/book/chapter_01_domain_model.html
 
-## Licença
 
-* TODO
-* mas pode forkar a vontade
