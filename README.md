@@ -89,6 +89,25 @@ make migration-upgrade
 poetry run uvicorn servidor.config:app
 ```
 
+
+6 - Dados para testar:
+> Para testar a API, utilize os dados abaixo:
+> Cada usuario já possui uma carteira criada.
+> Cada Carteira tem transferências realizadas.
+
+- Usuário:
+```json
+{
+    "email": "usuario1@email.com",
+    "password": "password1"
+},
+{
+    "email": "usuario2@email.com",
+    "password": "password2"
+
+}
+```
+
 - ---
 ## :wrench: Comandos Úteis
 - Caso queira parar o projeto, execute o comando:
