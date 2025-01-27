@@ -1,0 +1,46 @@
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "${DB_PORT}:5432"
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 128M
+
+  pg:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+        - "8889:80"
+    depends_on:
+        - db
+
+  backend:
+    build:
+      context: ../../
+      dockerfile: ./.infra/docker/dockerfile.backend
+    env_file:
+      - ../../.env.docker
+    ports:
+      - "${PORT}:${PORT}"
+    depends_on:
+      - db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${PORT}/health-check"]
+      interval: 10s
+      start_interval: 5s
+      timeout: 2s
+      retries: 5
+
+
+  

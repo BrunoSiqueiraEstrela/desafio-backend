@@ -1,0 +1,37 @@
+FROM python:3.11-slim as base
+
+# Install dependencies
+WORKDIR /app
+COPY ./poetry.toml ./
+COPY ./poetry.lock ./
+COPY ./pyproject.toml ./
+COPY ./README.md ./
+# RESOLVE PROBLEMA NO POETRY e PSYCOPG2
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libpq-dev \
+    gcc \
+    curl && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# INSTALL POETRY
+RUN pip install poetry 
+
+# INSTALL DEPENDENCIES
+RUN poetry install --no-root
+
+FROM base as deploy
+
+WORKDIR /app
+COPY ./contexto /app/contexto
+COPY ./servidor /app/servidor
+COPY ./.infra /app/.infra
+COPY ./libs /app/libs
+
+# COPY ./src /app/src
+COPY ./main.py /app/main.py
+COPY ./makefile /app/makefile
+
+
+ENTRYPOINT ["poetry", "run", "python", "main.py"]
